@@ -1,15 +1,15 @@
 const prompt = require('prompt-sync')({sigint: true});
 const clear = require('clear-screen');
 
-const hat = '^';
+const hat = '∆';
 const hole = 'O';
 const fieldCharacter = '░';
-const pathCharacter = '*';
+const pathCharacter = '☻';
 const row = 10;
 const col = 10;
 let hatRow, hatCol;
 let isQuit = false;
-let message = "";
+let message = "Press 'U' for Up, 'D' for Down, 'L' for Left, 'R' for Right, 'Q' to Quit";
 
 class Field {
     field = [];
@@ -30,12 +30,12 @@ class Field {
 
         for(let y = 0; y < row ; y++){
             for (let x = 0; x < col; x++){
-                const isHole = Math.floor(Math.random() * (row/2)); //this generates a random number from 0 to (row/2)
+                const isHole = Math.floor(Math.random() * 5); //this generates a random number from 0 to 4
                 if (isHole == 0){
                     this.field[y][x] = hole;  // place a hole if isHole == 0                  
                 }
                 else {
-                    this.field[y][x] = fieldCharacter;  
+                    this.field[y][x] = fieldCharacter;  // place field if isHole is between 1 to 4
                 }
             }
         }
@@ -67,7 +67,7 @@ class Field {
     }
 
     askQuestion() {
-        const answer = prompt('Which way> ').toUpperCase();
+        const answer = prompt("Which way? > ").toUpperCase();
         switch(answer){
             case "U":
                 if (this.locationY != 0) {
@@ -78,7 +78,7 @@ class Field {
                 break;
 
             case "D":
-                if (this.locationY != col - 1 ) {
+                if (this.locationY != row - 1 ) {
                     this.field[this.locationY][this.locationX] = fieldCharacter;
                     this.locationY++;
                 }
@@ -94,7 +94,7 @@ class Field {
                 break;
 
             case "R":
-                if (this.locationX != row - 1) {
+                if (this.locationX != col - 1) {
                     this.field[this.locationY][this.locationX] = fieldCharacter;
                     this.locationX++;
                 }
@@ -106,7 +106,7 @@ class Field {
                 break;
 
             default:
-                message = "Enter U, D, L or R"; //sets the error message to be printed
+                message = "Please enter only U, D, L or R"; //sets the error message to be printed
 
         }
 
@@ -134,9 +134,11 @@ class Field {
         do {
             this.print();
             this.askQuestion();
-            this.placePathCharacter();
+            if (!isQuit){
+                this.placePathCharacter();
+            }
             
-        } while (!isQuit);
+        } while (!isQuit);       
     }
 
     
