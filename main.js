@@ -134,10 +134,8 @@ class Field {
         do {
             this.print();
             this.askQuestion();
-            if (!isQuit){
-                this.placePathCharacter();
-            }
-            
+            if (isQuit) break;        // comes out of loop when 'out of bounds'     
+            this.placePathCharacter();            
         } while (!isQuit);       
     }
 
